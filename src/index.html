@@ -1,14 +1,22 @@
 <html>
     <head>
-        <meta charset="utf-8"></meta>
+        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0"></meta>
         <title>captchify</title>
 		<link href="style.css" rel="stylesheet" type="text/css" />
+		<link href="../../dist/css/bootstrap.css" rel="stylesheet">
         <link rel="icon" 
             type="image/x-icon"
             href="images/favicon.ico" />
     </head>
     <body>
-    	<div id='canvas'></div>
+    	<div id="wrap">
+    		<div id="canvas"></div>
+    	</div>
+    	<div id="footer">
+      		<div class="container">
+        		<p class="text-muted">Place sticky footer content here.</p>
+      		</div>
+    	</div>
 
         <script src="js/libs/jquery.min.js"></script>
         <script src="js/libs/svg.min.js"></script>
@@ -24,5 +32,8 @@
 		  ga('create', 'UA-46110154-2', 'mozzarellabs.com');
 		  ga('send', 'pageview');
 		</script>
+		    <!-- Placed at the end of the document so the pages load faster -->
+    	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    	<script src="../../dist/js/bootstrap.min.js"></script>
     </body>
 </html>
