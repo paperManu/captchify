@@ -2,6 +2,7 @@
 function Captchifier(canvas) {
     // Attributes
     this.inputText = "mozzarellabs";
+    this.fontSize = 10;
 
     // Private attributes
     var father = undefined;
@@ -22,6 +23,8 @@ function Captchifier(canvas) {
     this.draw = function(text) {
         if (text != undefined && typeof(text) == 'string')
             this.inputText = text;
+        else
+            return;
             
         svgText.text(this.inputText);
     };
@@ -33,18 +36,22 @@ function Captchifier(canvas) {
 
         svgText.font({size: size});
     };
-}
 
-/*************/
-function initGUI() {
-    var g = new dat.GUI();
+    /*********/
+    // dat.GUI things
+    var gui = new dat.GUI();
+    document.getElementById(father.attr('id')).appendChild(gui.domElement);
+
+    gui.add(this, 'fontSize', 8, 200).onChange(function(v) {
+        svgText.font({size: v});
+    });
+    gui.add(this, 'inputText').onChange(function(t) {
+        svgText.text(t);
+    });
 }
 
 /*************/
 $(document).ready(function() {
     var captcha = new Captchifier($('#canvas'));
-    captcha.draw('pouet');
     captcha.setFontSize(180);
-
-    initGUI();
 })
