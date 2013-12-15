@@ -40,7 +40,7 @@ function Captchifier(canvas) {
     /*********/
     // dat.GUI things
     var gui = new dat.GUI();
-    document.getElementById(father.attr('id')).appendChild(gui.domElement);
+    document.getElementById("canvas").appendChild(gui.domElement);
 
     gui.add(this, 'fontSize', 8, 200).onChange(function(v) {
         svgText.font({size: v});
@@ -52,6 +52,6 @@ function Captchifier(canvas) {
 
 /*************/
 $(document).ready(function() {
-    var captcha = new Captchifier($('#canvas'));
+    var captcha = new Captchifier($('#drawing'));
     captcha.setFontSize(180);
 })
