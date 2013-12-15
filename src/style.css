@@ -1,2 +1,47 @@
 @charset "utf-8";
 /* CSS Document */
+
+body {
+	height: 100%;
+}
+
+#logo {
+	width:170px;
+	height: 40px;
+	background-image: url('images/logo_mozza_header.png');
+	background-repeat: no-repeat;
+	float: left;
+	margin-top: 6px;
+}
+
+.project {
+	font-family: "Courier New", Courier, monospace;
+	font-size: 20px !important;
+}
+
+#wrap {
+	min-height: 100%;
+  	height: auto;
+  	/* Negative indent footer by its height */
+  	margin: 0 auto -60px;
+  	/* Pad bottom by footer height */
+  	padding: 0 0 60px;
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+  	height: 60px;
+  	background-color: #000;
+ }
+
+ #wrap > .container {
+  	padding: 60px 15px 0;
+}
+.container .text-muted {
+  	margin: 20px 0;
+}
+
+#footer > .container {
+  	padding-left: 15px;
+  	padding-right: 15px;
+}
