@@ -14,6 +14,11 @@ body {
 	margin-top: 6px;
 }
 
+.project {
+	font-family: "Courier New", Courier, monospace;
+	font-size: 20px !important;
+}
+
 #wrap {
 	min-height: 100%;
   	height: auto;
