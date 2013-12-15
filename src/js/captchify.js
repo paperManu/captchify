@@ -13,18 +13,17 @@ function Captchifier(canvas) {
     var width = father.width();
     var height = father.height();
 
-    this.drawArea = SVG(father.attr('id'));
-    this.svgText = this.drawArea.text(this.inputText);
-    this.svgText.font({anchor: 'middle'});
-    this.svgText.move(width / 2, height / 2);
+    var drawArea = SVG(father.attr('id'));
+    var svgText = drawArea.text(this.inputText);
+    svgText.font({anchor: 'middle'});
+    svgText.move(width / 2, height / 2);
 
     /*********/
     this.draw = function(text) {
         if (text != undefined && typeof(text) == 'string')
             this.inputText = text;
             
-        this.svgText.text(this.inputText);
-        console.log(this.svgText);
+        svgText.text(this.inputText);
     };
 
     /*********/
@@ -32,21 +31,20 @@ function Captchifier(canvas) {
         if (size != undefined && typeof(size) != 'number')
             return;
 
-        this.svgText.font({size: size});
+        svgText.font({size: size});
     };
 }
 
 /*************/
 function initGUI() {
-    // dat.GUI related
     var g = new dat.GUI();
 }
 
 /*************/
 $(document).ready(function() {
-    //initGUI();
-
     var captcha = new Captchifier($('#canvas'));
     captcha.draw('pouet');
     captcha.setFontSize(180);
+
+    initGUI();
 })
