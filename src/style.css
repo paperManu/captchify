@@ -28,6 +28,10 @@ body {
   	padding: 0 0 60px;
 }
 
+#canvas {
+	margin-top: 51px;
+}
+
 /* Set the fixed height of the footer here */
 #footer {
   	height: 60px;
