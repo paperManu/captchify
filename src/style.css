@@ -24,19 +24,16 @@ body {
 }
 
 #wrap {
+	min-height:80%;
+	height: auto;
   	/* Negative indent footer by its height */
   	margin: 0 auto -60px;
   	/* Pad bottom by footer height */
-  	padding: 0 0 60px;
-}
-
-#canvas {
-	margin-top: 51px;
 }
 
 /* Set the fixed height of the footer here */
 #footer {
-  	height: 60px;
+  	height: 90px;
   	background-color: #000;
  }
 
