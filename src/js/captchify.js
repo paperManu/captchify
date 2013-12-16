@@ -42,6 +42,14 @@ function Captchifier(canvas) {
     this.inputText = "mozzarellabs";
     this.fontSize = 10;
     this.style = "";
+    this.numColors = 1;
+    this.letterSpacing = 0;
+    this.letterRotation = 0;
+    this.letterDecal = 0;
+    this.letterSwirl = 10;
+    this.linesNum = 100;
+    this.pointsNum = 100;
+    this.lineCurves = 20;
 
     var father = undefined;
     if (canvas == undefined)
@@ -69,6 +77,20 @@ function Captchifier(canvas) {
         this.svgText.text(this.inputText);
     };
 
+        var draw = SVG("canvas").size('100%', '100%');
+        var mw = document.getElementById("canvas");
+        var width = mw.clientWidth; 
+        var height = mw.clientHeight;
+        for (i=0; i<10; i++) {
+            var a = Math.ceil(Math.random() * width);
+            var b = Math.ceil(Math.random() * height);
+            var c = Math.ceil(Math.random() * width);
+            var d = Math.ceil(Math.random() * height);
+            var str = Math.floor((Math.random()*4)+1);
+            var testCol = randomColor();
+            var line = draw.line(a, b, c, d).stroke({ width: str , color: testCol});
+    };
+
     /*********/
     this.addLayer = function(type) {
         var layer = _types[type];
@@ -81,13 +103,51 @@ function initGUI(c) {
     var gui = new dat.GUI();
     document.getElementById("header").appendChild(gui.domElement);
 
-    gui.add(c, 'fontSize', 8, 200).onChange(function(v) {
-        c.svgText.font({anchor: 'middle', size: v});
-    });
+   
     gui.add(c, 'inputText').onChange(function(t) {
         c.svgText.text(t);
     });
     gui.add(c, 'style', _styles);
+
+    gui.add(c, 'numColors', 1, 10);
+
+    gui.add(c, 'letterSpacing', -10, 10);
+
+    gui.add(c, 'letterRotation', 0, 10);
+
+    gui.add(c, 'letterDecal', 0, 10);
+
+    gui.add(c, 'letterSwirl', 0, 10);
+
+    gui.add(c, 'fontSize', 8, 200).onChange(function(v) {
+        c.svgText.font({anchor: 'middle', size: v});
+    });
+
+    gui.add(c, 'linesNum', 0, 100).onChange(function(v) {
+        c.draw
+    });
+
+    gui.add(c, 'lineCurves', 0, 100);
+
+    gui.add(c, 'pointsNum', 0, 2000);
+
+
+}
+
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function randomColor () {
+    var a = Math.ceil(Math.random() * 255);
+    var b = Math.ceil(Math.random() * 255);
+    var c = Math.ceil(Math.random() * 255);
+    return rgbToHex(a, b, c);
 }
 
 /*************/

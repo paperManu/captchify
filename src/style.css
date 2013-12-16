@@ -29,6 +29,24 @@ body {
 	background-color: #fff;
 }
 
+#share {
+	text-align: center;
+}
+
+#share-text, #viewer-text {
+	padding-top: 0px;
+	padding-bottom: 20px;
+	cursor: default;
+}
+
+#viewer-text {
+	text-align: center;
+}
+
+#share-buttons {
+	padding-bottom: 20px;
+}
+
 /* Set the fixed height of the footer here */
 #footer {
   	height: auto;
