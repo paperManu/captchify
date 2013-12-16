@@ -3,6 +3,7 @@
 
 body {
 	height: 100%;
+	background-color: #000 !important;
 }
 
 #logo {
@@ -25,11 +26,12 @@ body {
 
 #wrap {
 	height: auto;
+	background-color: #fff;
 }
 
 /* Set the fixed height of the footer here */
 #footer {
-  	height: 90px;
+  	height: auto;
   	background-color: #000;
  }
 
