@@ -77,6 +77,22 @@ function Captchifier(canvas) {
         this.svgText.text(this.inputText);
     };
 
+        // var draw = SVG("canvas").size('100%', '100%');
+        // var mw = document.getElementById("canvas");
+        // var width = mw.clientWidth; 
+        // var height = mw.clientHeight;
+        // for (i=0; i<10; i++) {
+        //     var a = Math.ceil(Math.random() * width);
+        //     var b = Math.ceil(Math.random() * height);
+        //     var c = Math.ceil(Math.random() * width);
+        //     var d = Math.ceil(Math.random() * height);
+        //     var str = Math.floor((Math.random()*4)+1);
+        //     var testCol = randomColor();
+        //     var line = draw.line(a, b, c, d).stroke({ width: str , color: testCol});
+        // };
+
+
+        // random curves // 
         var draw = SVG("canvas").size('100%', '100%');
         var mw = document.getElementById("canvas");
         var width = mw.clientWidth; 
@@ -86,10 +102,17 @@ function Captchifier(canvas) {
             var b = Math.ceil(Math.random() * height);
             var c = Math.ceil(Math.random() * width);
             var d = Math.ceil(Math.random() * height);
+            var e = Math.ceil(Math.random() * width);
+            var f = Math.ceil(Math.random() * height);
+            var g = Math.ceil(Math.random() * width);
+            var h = Math.ceil(Math.random() * height);
+            var plot = "M"+a+","+b+" Q"+c+", "+d+ " "+e+","+f+" T"+g+","+h;
+            console.log(plot);
             var str = Math.floor((Math.random()*4)+1);
             var testCol = randomColor();
-            var line = draw.line(a, b, c, d).stroke({ width: str , color: testCol});
-    };
+            var curve = draw.path(plot).stroke(testCol).fill('none');
+        }; 
+
 
     /*********/
     this.addLayer = function(type) {
