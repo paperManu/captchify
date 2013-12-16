@@ -1,13 +1,35 @@
 var _styles = ['first', 'second', 'third'];
 
 /*************/
+var _types = {
+    circles: function() {
+        var circle = draw.circle(100).move(200, 200);
+        return circle;
+    },
+
+    lines: function() {
+        var draw = SVG("canvas").size('100%', '100%');
+        var mw = document.getElementById("canvas");
+        var width = mw.clientWidth; 
+        var height = mw.clientHeight;
+        for (i=0; i<40; i++) {
+            var a = Math.ceil(Math.random() * width);
+            var b = Math.ceil(Math.random() * 400);
+            var c = Math.ceil(Math.random() * width);
+            var d = Math.ceil(Math.random() * 400);
+            var str = Math.floor((Math.random()*4)+1);
+            var line = draw.line(a, b, c, d).stroke({ width: str });
+        }
+    }
+};
+
+/*************/
 function Captchifier(canvas) {
     // Attributes
     this.inputText = "mozzarellabs";
     this.fontSize = 10;
     this.style = "";
 
-    // Private attributes
     var father = undefined;
     if (canvas == undefined)
         father = document;
@@ -18,9 +40,11 @@ function Captchifier(canvas) {
     var height = father.height();
 
     var drawArea = SVG(father.attr('id')).size('100%', '60%');
-    var svgText = drawArea.text(this.inputText);
-    svgText.font({anchor: 'middle'});
-    svgText.move(width / 2, height / 2);
+    this.svgText = drawArea.text(this.inputText);
+    this.svgText.move(width / 2, height / 2);
+    this.svgText.font({size: 160, anchor: 'middle'});
+
+    var layers = [];
 
     /*********/
     this.draw = function(text) {
@@ -29,47 +53,34 @@ function Captchifier(canvas) {
         else
             return;
             
-        svgText.text(this.inputText);
+        this.svgText.text(this.inputText);
     };
 
     /*********/
-    this.setFontSize = function(size) {
-        if (size != undefined && typeof(size) != 'number')
-            return;
-
-        svgText.font({size: size});
+    this.addLayer = function(type) {
+        var layer = _types[type];
+        console.log(layer);
     };
+}
 
-    /*********/
-    // dat.GUI things
+/*************/
+function initGUI(c) {
     var gui = new dat.GUI();
     document.getElementById("header").appendChild(gui.domElement);
 
-    gui.add(this, 'fontSize', 8, 200).onChange(function(v) {
-        svgText.font({size: v});
+    gui.add(c, 'fontSize', 8, 200).onChange(function(v) {
+        c.svgText.font({anchor: 'middle', size: v});
     });
-    gui.add(this, 'inputText').onChange(function(t) {
-        svgText.text(t);
+    gui.add(c, 'inputText').onChange(function(t) {
+        c.svgText.text(t);
     });
-    gui.add(this, 'style', _styles);
-
-    // les lignes aléatoires
-    var draw = SVG("canvas").size('100%', '100%');
-    var mw = document.getElementById("canvas");
-    var width = mw.clientWidth; 
-    var height = mw.clientHeight;
-    for (i=0; i<40; i++) {
-        var a = Math.ceil(Math.random() * width);
-        var b = Math.ceil(Math.random() * 400);
-        var c = Math.ceil(Math.random() * width);
-        var d = Math.ceil(Math.random() * 400);
-        var str = Math.floor((Math.random()*4)+1);
-        var line = draw.line(a, b, c, d).stroke({ width: str });
-    }
+    gui.add(c, 'style', _styles);
 }
 
 /*************/
 $(document).ready(function() {
     var captcha = new Captchifier($('#drawing'));
-    captcha.setFontSize(180);
+    initGUI(captcha);
+
+    captcha.addLayer("circles");
 })
