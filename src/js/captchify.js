@@ -74,31 +74,7 @@ function initGUI(c) {
     gui.add(c, 'inputText').onChange(function(t) {
         c.svgText.text(t);
     });
-<<<<<<< HEAD
-    gui.add(this, 'style', _styles);
-
-    // les lignes aléatoires
-    var draw = SVG("drawing");
-    var mw = document.getElementById("drawing");
-    var width = mw.clientWidth; 
-    var height = mw.clientHeight;
-    for (i=0; i<40; i++) {
-        var a = Math.ceil(Math.random() * width);
-        var b = Math.ceil(Math.random() * height);
-        var c = Math.ceil(Math.random() * width);
-        var d = Math.ceil(Math.random() * height);
-        var str = Math.floor((Math.random()*4)+1);
-        var line = draw.line(a, b, c, d).stroke({ width: str });
-    }
-
-    for (i=0; i<1000; i++) {
-        var a = Math.ceil(Math.random() * width);
-        var b = Math.ceil(Math.random() * height);
-        var line = draw.line(a, b, a+2, b).stroke({ width: 2 });
-    }
-=======
     gui.add(c, 'style', _styles);
->>>>>>> b6aa1da1c424e6a671ccf12b2ce7fbe199de04c4
 }
 
 /*************/
