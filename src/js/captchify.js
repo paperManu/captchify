@@ -98,15 +98,7 @@ function Captchifier(canvas) {
         var width = mw.clientWidth; 
         var height = mw.clientHeight;
         for (i=0; i<10; i++) {
-            var a = Math.ceil(Math.random() * width);
-            var b = Math.ceil(Math.random() * height);
-            var c = Math.ceil(Math.random() * width);
-            var d = Math.ceil(Math.random() * height);
-            var e = Math.ceil(Math.random() * width);
-            var f = Math.ceil(Math.random() * height);
-            var g = Math.ceil(Math.random() * width);
-            var h = Math.ceil(Math.random() * height);
-            var plot = "M"+a+","+b+" Q"+c+", "+d+ " "+e+","+f+" T"+g+","+h;
+            var plot = "M"+randomWidth(width)+","+randomHeight(height)+" Q"+randomWidth(width)+", "+randomHeight(height)+ " "+randomWidth(width)+","+randomHeight(height)+" T"+randomWidth(width)+","+randomHeight(height);
             console.log(plot);
             var str = Math.floor((Math.random()*4)+1);
             var testCol = randomColor();
@@ -171,6 +163,16 @@ function randomColor () {
     var b = Math.ceil(Math.random() * 255);
     var c = Math.ceil(Math.random() * 255);
     return rgbToHex(a, b, c);
+}
+
+function randomWidth (width) {
+    var a = Math.ceil(Math.random() * width);
+    return a;
+}
+
+function randomHeight (height) {
+    var a = Math.ceil(Math.random() * height);
+    return a;
 }
 
 /*************/
