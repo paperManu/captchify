@@ -1,8 +1,11 @@
+var _styles = ['first', 'second', 'third'];
+
 /*************/
 function Captchifier(canvas) {
     // Attributes
     this.inputText = "mozzarellabs";
     this.fontSize = 10;
+    this.style = "";
 
     // Private attributes
     var father = undefined;
@@ -48,6 +51,7 @@ function Captchifier(canvas) {
     gui.add(this, 'inputText').onChange(function(t) {
         svgText.text(t);
     });
+    gui.add(this, 'style', _styles);
 }
 
 /*************/
