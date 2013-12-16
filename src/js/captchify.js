@@ -14,7 +14,7 @@ function Captchifier(canvas) {
     var width = father.width();
     var height = father.height();
 
-    var drawArea = SVG(father.attr('id'));
+    var drawArea = SVG(father.attr('id')).size('100%', '60%');
     var svgText = drawArea.text(this.inputText);
     svgText.font({anchor: 'middle'});
     svgText.move(width / 2, height / 2);
@@ -40,7 +40,7 @@ function Captchifier(canvas) {
     /*********/
     // dat.GUI things
     var gui = new dat.GUI();
-    document.getElementById("canvas").appendChild(gui.domElement);
+    document.getElementById("header").appendChild(gui.domElement);
 
     gui.add(this, 'fontSize', 8, 200).onChange(function(v) {
         svgText.font({size: v});
