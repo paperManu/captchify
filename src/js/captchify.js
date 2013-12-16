@@ -54,15 +54,15 @@ function Captchifier(canvas) {
     gui.add(this, 'style', _styles);
 
     // les lignes aléatoires
-    var draw = SVG("canvas").size('100%', '100%');
-    var mw = document.getElementById("canvas");
+    var draw = SVG("drawing");
+    var mw = document.getElementById("drawing");
     var width = mw.clientWidth; 
     var height = mw.clientHeight;
     for (i=0; i<40; i++) {
         var a = Math.ceil(Math.random() * width);
-        var b = Math.ceil(Math.random() * 400);
+        var b = Math.ceil(Math.random() * height);
         var c = Math.ceil(Math.random() * width);
-        var d = Math.ceil(Math.random() * 400);
+        var d = Math.ceil(Math.random() * height);
         var str = Math.floor((Math.random()*4)+1);
         var line = draw.line(a, b, c, d).stroke({ width: str });
     }
