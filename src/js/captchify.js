@@ -2,16 +2,15 @@ var _styles = ['first', 'second', 'third'];
 
 /*************/
 var _types = {
-    circles: function() {
+    circles: function(area) {
         var circle = draw.circle(100).move(200, 200);
         return circle;
     },
 
-    lines: function() {
-        var draw = SVG("canvas").size('100%', '100%');
-        var mw = document.getElementById("canvas");
-        var width = mw.clientWidth; 
-        var height = mw.clientHeight;
+    lines: function(area) {
+        var canvas = area.parent;
+        var width = canvas.clientWidth; 
+        var height = canvas.clientHeight;
         for (i=0; i<40; i++) {
             var a = Math.ceil(Math.random() * width);
             var b = Math.ceil(Math.random() * height);
@@ -22,31 +21,28 @@ var _types = {
         }
     },
 
-    curves: function() {
-        var draw = SVG("canvas").size('100%', '100%');
-        var mw = document.getElementById("canvas");
-        var width = mw.clientWidth; 
-        var height = mw.clientHeight;
+    curves: function(area) {
+        var canvas = area.parent;
+        var width = canvas.clientWidth; 
+        var height = canvas.clientHeight;
         for (i=0; i<10; i++) {
             var plot = "M"+randomWidth(width)+","+randomHeight(height)+" Q"+randomWidth(width)+", "+randomHeight(height)+ " "+randomWidth(width)+","+randomHeight(height)+" T"+randomWidth(width)+","+randomHeight(height);
             console.log(plot);
             var str = Math.floor((Math.random()*4)+1);
             var testCol = randomColor();
-            var curve = draw.path(plot).stroke(testCol).fill('none');
+            var curve = area.path(plot).stroke(testCol).fill('none');
         }; 
     },
 
-    points: function() {
-        var draw = SVG("canvas").size('100%', '100%');
-        var mw = document.getElementById("canvas");
-        var width = mw.clientWidth; 
-        var height = mw.clientHeight;
+    points: function(area) {
+        var canvas = area.parent;
+        var width = canvas.clientWidth; 
+        var height = canvas.clientHeight;
         for (i=0; i<1000; i++) {
             var a = Math.ceil(Math.random() * width);
             var b = Math.ceil(Math.random() * height);
-            var line = draw.line(a, b, a+2, b).stroke({ width: 2 });
+            var line = area.line(a, b, a+2, b).stroke({ width: 2 });
         }
-
     }
 };
 
@@ -81,6 +77,7 @@ function Captchifier(canvas) {
 
     var layers = [];
 
+    console.log(drawArea.parent);
     /*********/
     this.draw = function(text) {
         if (text != undefined && typeof(text) == 'string')
@@ -91,39 +88,10 @@ function Captchifier(canvas) {
         this.svgText.text(this.inputText);
     };
 
-        // var draw = SVG("canvas").size('100%', '100%');
-        // var mw = document.getElementById("canvas");
-        // var width = mw.clientWidth; 
-        // var height = mw.clientHeight;
-        // for (i=0; i<10; i++) {
-        //     var a = Math.ceil(Math.random() * width);
-        //     var b = Math.ceil(Math.random() * height);
-        //     var c = Math.ceil(Math.random() * width);
-        //     var d = Math.ceil(Math.random() * height);
-        //     var str = Math.floor((Math.random()*4)+1);
-        //     var testCol = randomColor();
-        //     var line = draw.line(a, b, c, d).stroke({ width: str , color: testCol});
-        // };
-
-
-        // random curves // 
-        var draw = SVG("canvas").size('100%', '100%');
-        var mw = document.getElementById("canvas");
-        var width = mw.clientWidth; 
-        var height = mw.clientHeight;
-        for (i=0; i<10; i++) {
-            var plot = "M"+randomWidth(width)+","+randomHeight(height)+" Q"+randomWidth(width)+", "+randomHeight(height)+ " "+randomWidth(width)+","+randomHeight(height)+" T"+randomWidth(width)+","+randomHeight(height);
-            console.log(plot);
-            var str = Math.floor((Math.random()*4)+1);
-            var testCol = randomColor();
-            var curve = draw.path(plot).stroke(testCol).fill('none');
-        }; 
-
-
     /*********/
     this.addLayer = function(type) {
         var layer = _types[type];
-        console.log(layer);
+        layer(drawArea);
     };
 }
 
@@ -157,5 +125,5 @@ $(document).ready(function() {
     var captcha = new Captchifier($('#drawing'));
     initGUI(captcha);
 
-    captcha.addLayer("circles");
+    captcha.addLayer("curves");
 })
