@@ -29,6 +29,73 @@ body {
 	background-color: #fff;
 }
 
+#controls {
+	padding-top:10px;
+	padding-bottom: 4px;
+	background-color: #F5F5F5;
+}
+
+#toggle-controls {
+	background-color: #F5F5F5; 
+	cursor: pointer;
+	text-align: center;
+}
+
+.btn-group > .btn + .dropdown-toggle {
+	height: 34px;
+}
+
+.btn-fix {
+	display: inline-flex !important;
+}
+
+.btn-group-justified > .btn, .btn-group-justified > .btn-group {
+	width: 50% !important;
+}
+
+.b-list {
+	margin-top: 7px;
+	margin-bottom: 7px;
+}
+
+.sliders {
+	width: 75%;
+	float: right;
+	margin-top: 4px;
+}
+
+.bfh-slider {
+	margin-top: 0px !important;
+	margin-bottom: 21px !important;
+}
+
+.bfh-slider>.bfh-slider-handle {
+	margin-top: -8px !important;
+}
+
+.slider-txt {
+	float: left;
+}
+
+.slider-cont {
+	padding: 6px;
+	margin-bottom: 0;
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 1.428571429;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	background-image: none;
+	border: 1px solid #cccccc;
+	border-radius: 4px;
+	height: 34px;
+}
+
+#style-txt {
+	margin-left: 4px;
+}
+
 #share {
 	text-align: center;
 }
