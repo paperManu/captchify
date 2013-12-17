@@ -20,20 +20,34 @@ var _types = {
             var str = Math.floor((Math.random()*4)+1);
             var line = draw.line(a, b, c, d).stroke({ width: str });
         }
+    },
+
+    curves: function() {
+        var draw = SVG("canvas").size('100%', '100%');
+        var mw = document.getElementById("canvas");
+        var width = mw.clientWidth; 
+        var height = mw.clientHeight;
+        for (i=0; i<10; i++) {
+            var plot = "M"+randomWidth(width)+","+randomHeight(height)+" Q"+randomWidth(width)+", "+randomHeight(height)+ " "+randomWidth(width)+","+randomHeight(height)+" T"+randomWidth(width)+","+randomHeight(height);
+            console.log(plot);
+            var str = Math.floor((Math.random()*4)+1);
+            var testCol = randomColor();
+            var curve = draw.path(plot).stroke(testCol).fill('none');
+        }; 
+    },
+
+    points: function() {
+        var draw = SVG("canvas").size('100%', '100%');
+        var mw = document.getElementById("canvas");
+        var width = mw.clientWidth; 
+        var height = mw.clientHeight;
+        for (i=0; i<1000; i++) {
+            var a = Math.ceil(Math.random() * width);
+            var b = Math.ceil(Math.random() * height);
+            var line = draw.line(a, b, a+2, b).stroke({ width: 2 });
+        }
+
     }
-
-    // points: function() {
-    //     var draw = SVG("canvas").size('100%', '100%');
-    //     var mw = document.getElementById("canvas");
-    //     var width = mw.clientWidth; 
-    //     var height = mw.clientHeight;
-    //     for (i=0; i<1000; i++) {
-    //         var a = Math.ceil(Math.random() * width);
-    //         var b = Math.ceil(Math.random() * height);
-    //         var line = draw.line(a, b, a+2, b).stroke({ width: 2 });
-    //     }
-
-    // }
 };
 
 /*************/
@@ -123,56 +137,19 @@ function initGUI(c) {
         c.svgText.text(t);
     });
     gui.add(c, 'style', _styles);
-
     gui.add(c, 'numColors', 1, 10);
-
     gui.add(c, 'letterSpacing', -10, 10);
-
     gui.add(c, 'letterRotation', 0, 10);
-
     gui.add(c, 'letterDecal', 0, 10);
-
     gui.add(c, 'letterSwirl', 0, 10);
-
     gui.add(c, 'fontSize', 8, 200).onChange(function(v) {
         c.svgText.font({anchor: 'middle', size: v});
     });
-
     gui.add(c, 'linesNum', 0, 100).onChange(function(v) {
         c.draw
     });
-
     gui.add(c, 'lineCurves', 0, 100);
-
     gui.add(c, 'pointsNum', 0, 2000);
-
-
-}
-
-function componentToHex(c) {
-    var hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
-}
-
-function rgbToHex(r, g, b) {
-    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-}
-
-function randomColor () {
-    var a = Math.ceil(Math.random() * 255);
-    var b = Math.ceil(Math.random() * 255);
-    var c = Math.ceil(Math.random() * 255);
-    return rgbToHex(a, b, c);
-}
-
-function randomWidth (width) {
-    var a = Math.ceil(Math.random() * width);
-    return a;
-}
-
-function randomHeight (height) {
-    var a = Math.ceil(Math.random() * height);
-    return a;
 }
 
 /*************/
