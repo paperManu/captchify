@@ -1,9 +1,9 @@
-var _styles = ['first', 'second', 'third'];
+var _styles = ['circles', 'lines', 'curves', 'points'];
 
 /*************/
 var _types = {
     circles: function(area) {
-        var circle = draw.circle(100).move(200, 200);
+        var circle = area.circle(100).move(200, 200);
         return circle;
     },
 
@@ -11,38 +11,55 @@ var _types = {
         var canvas = area.parent;
         var width = canvas.clientWidth; 
         var height = canvas.clientHeight;
+
+        var group = area.group();
         for (i=0; i<40; i++) {
             var a = Math.ceil(Math.random() * width);
             var b = Math.ceil(Math.random() * height);
             var c = Math.ceil(Math.random() * width);
             var d = Math.ceil(Math.random() * height);
             var str = Math.floor((Math.random()*4)+1);
-            var line = draw.line(a, b, c, d).stroke({ width: str });
+            var line = area.line(a, b, c, d).stroke({ width: str });
+            group.add(line);
         }
+        group.back();
+
+        return group;
     },
 
     curves: function(area) {
         var canvas = area.parent;
         var width = canvas.clientWidth; 
         var height = canvas.clientHeight;
+
+        var group = area.group();
         for (i=0; i<10; i++) {
             var plot = "M"+randomWidth(width)+","+randomHeight(height)+" Q"+randomWidth(width)+", "+randomHeight(height)+ " "+randomWidth(width)+","+randomHeight(height)+" T"+randomWidth(width)+","+randomHeight(height);
-            console.log(plot);
             var str = Math.floor((Math.random()*4)+1);
             var testCol = randomColor();
             var curve = area.path(plot).stroke(testCol).fill('none');
-        }; 
+            group.add(curve);
+        } 
+        group.back();
+
+        return group;
     },
 
     points: function(area) {
         var canvas = area.parent;
         var width = canvas.clientWidth; 
         var height = canvas.clientHeight;
+
+        var group = area.group();
         for (i=0; i<1000; i++) {
             var a = Math.ceil(Math.random() * width);
             var b = Math.ceil(Math.random() * height);
             var line = area.line(a, b, a+2, b).stroke({ width: 2 });
+            group.add(line);
         }
+        group.front();
+
+        return group;
     }
 };
 
@@ -77,7 +94,6 @@ function Captchifier(canvas) {
 
     var layers = [];
 
-    console.log(drawArea.parent);
     /*********/
     this.draw = function(text) {
         if (text != undefined && typeof(text) == 'string')
@@ -89,9 +105,18 @@ function Captchifier(canvas) {
     };
 
     /*********/
+    this.clearLayers = function() {
+        for (var i = 0; i < layers.length; ++i) {
+            layers[i].remove();
+        }
+        layers = [];
+    };
+
+    /*********/
     this.addLayer = function(type) {
-        var layer = _types[type];
-        layer(drawArea);
+        var func = _types[type];
+        var layer = func(drawArea);
+        layers.push(layer);
     };
 }
 
@@ -104,7 +129,10 @@ function initGUI(c) {
     gui.add(c, 'inputText').onChange(function(t) {
         c.svgText.text(t);
     });
-    gui.add(c, 'style', _styles);
+    gui.add(c, 'style', _styles).onChange(function(t) {
+        c.clearLayers();
+        c.addLayer(t);
+    });
     gui.add(c, 'numColors', 1, 10);
     gui.add(c, 'letterSpacing', -10, 10);
     gui.add(c, 'letterRotation', 0, 10);
@@ -124,6 +152,4 @@ function initGUI(c) {
 $(document).ready(function() {
     var captcha = new Captchifier($('#drawing'));
     initGUI(captcha);
-
-    captcha.addLayer("curves");
 })
