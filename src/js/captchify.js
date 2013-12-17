@@ -22,7 +22,6 @@ var _types = {
             var line = area.line(a, b, c, d).stroke({ width: str });
             group.add(line);
         }
-        group.back();
 
         return group;
     },
@@ -40,7 +39,6 @@ var _types = {
             var curve = area.path(plot).stroke(testCol).fill('none');
             group.add(curve);
         } 
-        group.back();
 
         return group;
     },
@@ -57,7 +55,6 @@ var _types = {
             var line = area.line(a, b, a+2, b).stroke({ width: 2 });
             group.add(line);
         }
-        group.front();
 
         return group;
     }
@@ -68,7 +65,8 @@ function Captchifier(canvas) {
     // Attributes
     this.inputText = "mozzarellabs";
     this.fontSize = 10;
-    this.style = "";
+    this.frontStyle = "";
+    this.backStyle = "";
     this.numColors = 1;
     this.letterSpacing = 0;
     this.letterRotation = 0;
@@ -92,7 +90,7 @@ function Captchifier(canvas) {
     this.svgText.move(width / 2, height / 2);
     this.svgText.font({size: 160, anchor: 'middle'});
 
-    var layers = [];
+    var front, back;
 
     /*********/
     this.draw = function(text) {
@@ -105,18 +103,23 @@ function Captchifier(canvas) {
     };
 
     /*********/
-    this.clearLayers = function() {
-        for (var i = 0; i < layers.length; ++i) {
-            layers[i].remove();
-        }
-        layers = [];
+    this.setFront = function(type) {
+        var func = _types[type];
+        var layer = func(drawArea);
+        if (front != undefined)
+            front.remove();
+        front = layer;
+        front.front();
     };
 
     /*********/
-    this.addLayer = function(type) {
+    this.setBack = function(type) {
         var func = _types[type];
         var layer = func(drawArea);
-        layers.push(layer);
+        if (back != undefined)
+            back.remove();
+        back = layer;
+        back.back();
     };
 }
 
@@ -129,9 +132,11 @@ function initGUI(c) {
     gui.add(c, 'inputText').onChange(function(t) {
         c.svgText.text(t);
     });
-    gui.add(c, 'style', _styles).onChange(function(t) {
-        c.clearLayers();
-        c.addLayer(t);
+    gui.add(c, 'frontStyle', _styles).onChange(function(t) {
+        c.setFront(t);
+    });
+    gui.add(c, 'backStyle', _styles).onChange(function(t) {
+        c.setBack(t);
     });
     gui.add(c, 'numColors', 1, 10);
     gui.add(c, 'letterSpacing', -10, 10);
