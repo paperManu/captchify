@@ -125,36 +125,6 @@ function Captchifier(canvas) {
 }
 
 /*************/
-// function initGUI(c) {
-//     var gui = new dat.GUI();
-//     document.getElementById("header").appendChild(gui.domElement);
-
-   
-//     gui.add(c, 'inputText').onChange(function(t) {
-//         c.svgText.text(t);
-//     });
-//     gui.add(c, 'frontStyle', _styles).onChange(function(t) {
-//         c.setFront(t);
-//     });
-//     gui.add(c, 'backStyle', _styles).onChange(function(t) {
-//         c.setBack(t);
-//     });
-//     gui.add(c, 'numColors', 1, 10);
-//     gui.add(c, 'letterSpacing', -10, 10);
-//     gui.add(c, 'letterRotation', 0, 10);
-//     gui.add(c, 'letterDecal', 0, 10);
-//     gui.add(c, 'letterSwirl', 0, 10);
-//     gui.add(c, 'fontSize', 8, 200).onChange(function(v) {
-//         c.svgText.font({anchor: 'middle', size: v});
-//     });
-//     gui.add(c, 'linesNum', 0, 100).onChange(function(v) {
-//         c.draw
-//     });
-//     gui.add(c, 'lineCurves', 0, 100);
-//     gui.add(c, 'pointsNum', 0, 2000);
-// }
-
-/*************/
 $(document).ready(function() {
     var captcha = new Captchifier($('#drawing'));
     // initGUI(captcha);
