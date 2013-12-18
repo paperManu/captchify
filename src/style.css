@@ -39,6 +39,9 @@ body {
 	background-color: #F5F5F5; 
 	cursor: pointer;
 	text-align: center;
+	border-top: 1px solid #fff;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
 }
 
 .btn-group > .btn + .dropdown-toggle {
@@ -51,6 +54,10 @@ body {
 
 .btn-group-justified > .btn, .btn-group-justified > .btn-group {
 	width: 50% !important;
+}
+
+.input-group-addon {
+	cursor: default;
 }
 
 .b-list {
@@ -70,11 +77,19 @@ body {
 }
 
 .bfh-slider>.bfh-slider-handle {
-	margin-top: -8px !important;
+	margin-top: -5px !important;
+	height: 28px !important;
+}
+
+.bfh-slider-value {
+	margin-top: 3px !important;
+	width: 34px !important;
+	margin-left: -8px !important;
 }
 
 .slider-txt {
 	float: left;
+	cursor: default;
 }
 
 .slider-cont {

@@ -1,4 +1,5 @@
 var _styles = ['circles', 'lines', 'curves', 'points'];
+var _controls = true;
 
 /*************/
 var _types = {
@@ -160,5 +161,14 @@ $(document).ready(function() {
 
     $('#toggle-controls').on('click', function () {
         $('#controls').slideToggle();
+        if (_controls) {
+            $(this).find('span').text('Show controls');
+            _controls = false;
+        } else {
+            $(this).find('span').text('Hide controls');
+            _controls = true;
+        }
+        
     });
+
 })
