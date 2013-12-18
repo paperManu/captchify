@@ -39,7 +39,7 @@
   							<span class="input-group-addon">Text</span>
   							<input type="text" class="form-control" placeholder="Mozzarellabs" id="inputText">
 						</div>
-						<select id="style-selector" class="form-control b-list">
+						<select id="style-selector" class="form-control bfh-selectbox b-list">
 							<option value="gstyle">G Style</option>
 							<option value="ystyle">Y style</option>
 							<option value="mstyle">M style</option>
@@ -52,8 +52,8 @@
 						</select>
 						<div class="btn-toolbar b-list" role="toolbar">
 							<div class="btn-group btn-group-justified">
-				  				<button class="btn btn-default">Black and white</button>
-				  				<button class="btn btn-default">Colors</button>
+				  				<button id="bw" class="btn btn-default">Black and white</button>
+				  				<button id="col" class="btn btn-default">Colors</button>
 				  			</div>
 				  		</div>
 
@@ -63,7 +63,7 @@
 						    <div class="slider-txt">Size</div><div id="slider-size" class="sliders bfh-slider" data-min=8 data-max=240 data-value=160></div>
 						</div>
 						<div class="b-list slider-cont">
-						    <div class="slider-txt">Spacing</div><div id="slider-spacing" class="sliders bfh-slider"></div>
+						    <div class="slider-txt">Spacing</div><div id="slider-spacing" class="sliders bfh-slider" data-min=-10 data-max=10 data-value=0></div>
 						</div>
 						<div class="b-list slider-cont">
 						    <div class="slider-txt">Deformation</div><div id="slider-def" class="sliders bfh-slider"></div>
@@ -75,7 +75,7 @@
 
     				<div class="col-sm-4">
     					<div class="b-list slider-cont">
-						    <div class="slider-txt">Lines</div><div id="slider-lines" class="sliders bfh-slider"></div>
+						    <div class="slider-txt">Lines</div><div id="slider-lines" class="sliders bfh-slider" data-min=0 data-max=200 data-value=40></div>
 						</div>
 						<div class="b-list slider-cont">
 						    <div class="slider-txt">Curves</div><div id="slider-curves" class="sliders bfh-slider"></div>

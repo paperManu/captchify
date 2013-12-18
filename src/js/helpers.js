@@ -28,3 +28,7 @@ function randomHeight (height) {
     var a = Math.ceil(Math.random() * height);
     return a;
 }
+
+function setCustom () {
+    document.getElementById('style-selector').options[3].selected = true;
+}

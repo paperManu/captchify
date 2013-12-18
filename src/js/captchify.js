@@ -1,5 +1,6 @@
 var _styles = ['circles', 'lines', 'curves', 'points'];
 var _controls = true;
+var _colors = true; 
 
 /*************/
 var _types = {
@@ -8,22 +9,23 @@ var _types = {
         return circle;
     },
 
+    // 3ème colonne 
     lines: function(area) {
         var canvas = area.parent;
         var width = canvas.clientWidth; 
         var height = canvas.clientHeight;
 
         var group = area.group();
-        for (i=0; i<40; i++) {
-            var a = Math.ceil(Math.random() * width);
-            var b = Math.ceil(Math.random() * height);
-            var c = Math.ceil(Math.random() * width);
-            var d = Math.ceil(Math.random() * height);
+        for (i=0; i<50; i++) {
             var str = Math.floor((Math.random()*4)+1);
-            var line = area.line(a, b, c, d).stroke({ width: str });
+            if (_colors) {
+                var color = randomColor();
+            } else {
+                var color = '#000';
+            };
+            var line = area.line(randomWidth(width), randomHeight(height), randomWidth(width), randomHeight(height)).stroke({ width: str , color: color});
             group.add(line);
         }
-
         return group;
     },
 
@@ -36,8 +38,13 @@ var _types = {
         for (i=0; i<10; i++) {
             var plot = "M"+randomWidth(width)+","+randomHeight(height)+" Q"+randomWidth(width)+", "+randomHeight(height)+ " "+randomWidth(width)+","+randomHeight(height)+" T"+randomWidth(width)+","+randomHeight(height);
             var str = Math.floor((Math.random()*4)+1);
-            var testCol = randomColor();
-            var curve = area.path(plot).stroke(testCol).fill('none');
+            if (_colors) {
+                var color = randomColor();
+                console.log(color);
+            } else {
+                var color = '#000';
+            };
+            var curve = area.path(plot).stroke(color).fill('none');
             group.add(curve);
         } 
 
@@ -51,14 +58,25 @@ var _types = {
 
         var group = area.group();
         for (i=0; i<1000; i++) {
-            var a = Math.ceil(Math.random() * width);
-            var b = Math.ceil(Math.random() * height);
-            var line = area.line(a, b, a+2, b).stroke({ width: 2 });
+            var a = randomWidth(width);
+            var b = randomHeight(height);
+            if (_colors) {
+                var color = randomColor();
+                console.log(color);
+            } else {
+                var color = '#000';
+            };
+            var line = area.line(a, b, a+2, b).stroke({ width: 2, color: color });
             group.add(line);
         }
 
         return group;
+
     }
+
+    //blur: function(area) {
+
+    //}
 };
 
 /*************/
@@ -104,17 +122,17 @@ function Captchifier(canvas) {
     };
 
     /*********/
-    this.setBack = function(type) {
+    this.setBack = function(type, value) {
         var func = _types[type];
         var layer = func(drawArea);
         if (back != undefined)
-            back.remove();
+             back.remove();
         back = layer;
         back.back();
     };
 
     /*********/
-    this.setFront = function(type) {
+    this.setFront = function(type, value) {
         var func = _types[type];
         var layer = func(drawArea);
         if (front != undefined)
@@ -138,13 +156,73 @@ function Captchifier(canvas) {
 $(document).ready(function() {
     var captcha = new Captchifier($('#drawing'));
 
+    // 1ère colonne
     $('#inputText').on('input', function(e) {
         captcha.setText(e.target.value);
     });
-    $('#slider-size').on('change.bfhslider', function(e) {
-        captcha.setSize(e.target.value);
+
+    $('#style-selector').on('change.bfhselectbox', function(e) {
+        console.log(e.target.value);
     });
 
+    $('#font-selector').on('change.bfhselectbox', function(e) {
+        console.log(e.target.value);
+        setCustom();
+    });
+
+    $('#bw').on('click', function () {
+        _colors=false;
+        setCustom();
+    });
+    $('#col').on('click', function () {
+        _colors=true;
+        setCustom();
+    });
+
+
+
+    // 2ème colonne
+    $('#slider-size').on('change.bfhslider', function(e) {
+        captcha.setSize(e.target.value);
+        setCustom();
+    });
+
+    $('#slider-spacing').on('change.bfhslider', function(e) {
+        console.log(e.target.value);
+        setCustom();
+    });
+
+    $('#slider-def').on('change.bfhslider', function(e) {
+        console.log(e.target.value);
+        setCustom();
+    });
+
+    $('#slider-fuzzy').on('change.bfhslider', function(e) {
+        console.log(e.target.value);
+        setCustom();
+    });
+
+
+    // 3ème colonne
+    $('#slider-lines').on('change.bfhslider', function(e) {
+        captcha.setBack('lines');
+        setCustom();
+    });
+    $('#slider-curves').on('change.bfhslider', function(e) {
+        captcha.setBack('curves');
+        setCustom();
+    });
+    $('#slider-points').on('change.bfhslider', function(e) {
+        captcha.setBack('points');
+        setCustom();
+    });
+
+    $('#slider-blur').on('change.bfhslider', function(e) {
+        captacha.setFront('blur');
+        setCustom();
+    })
+
+    // montrer / cacher les controles
     $('#toggle-controls').on('click', function () {
         $('#controls').slideToggle();
         if (_controls) {
