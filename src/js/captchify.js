@@ -104,6 +104,16 @@ function Captchifier(canvas) {
     };
 
     /*********/
+    this.setBack = function(type) {
+        var func = _types[type];
+        var layer = func(drawArea);
+        if (back != undefined)
+            back.remove();
+        back = layer;
+        back.back();
+    };
+
+    /*********/
     this.setFront = function(type) {
         var func = _types[type];
         var layer = func(drawArea);
@@ -114,20 +124,26 @@ function Captchifier(canvas) {
     };
 
     /*********/
-    this.setBack = function(type) {
-        var func = _types[type];
-        var layer = func(drawArea);
-        if (back != undefined)
-            back.remove();
-        back = layer;
-        back.back();
+    this.setSize = function(size) {
+        this.svgText.font({size: size});
+    };
+
+    /*********/
+    this.setText = function(text) {
+        this.svgText.text(text);
     };
 }
 
 /*************/
 $(document).ready(function() {
     var captcha = new Captchifier($('#drawing'));
-    // initGUI(captcha);
+
+    $('#inputText').on('input', function(e) {
+        captcha.setText(e.target.value);
+    });
+    $('#slider-size').on('change.bfhslider', function(e) {
+        captcha.setSize(e.target.value);
+    });
 
     $('#toggle-controls').on('click', function () {
         $('#controls').slideToggle();
@@ -140,5 +156,4 @@ $(document).ready(function() {
         }
         
     });
-
 })
