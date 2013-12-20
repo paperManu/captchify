@@ -19,16 +19,17 @@ function randomColor () {
 
 /*************/
 function randomWidth (width) {
-    var a = Math.ceil(Math.random() * width);
+    var a = Math.floor(Math.random() * width);
     return a;
 }
 
 /*************/
 function randomHeight (height) {
-    var a = Math.ceil(Math.random() * height);
+    var a = Math.floor(Math.random() * height);
     return a;
 }
 
+/*************/
 function setCustom () {
     document.getElementById('style-selector').options[3].selected = true;
 }
