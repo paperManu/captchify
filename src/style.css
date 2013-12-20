@@ -90,6 +90,9 @@ body {
 .slider-txt {
 	float: left;
 	cursor: default;
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
 }
 
 .slider-cont {

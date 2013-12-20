@@ -205,9 +205,10 @@ $(document).ready(function() {
 
     // 3ème colonne
     $('#slider-lines').on('change.bfhslider', function(e) {
-        captcha.setBack('lines');
+        captcha.setBack('lines');    
         setCustom();
     });
+
     $('#slider-curves').on('change.bfhslider', function(e) {
         captcha.setBack('curves');
         setCustom();
@@ -234,4 +235,6 @@ $(document).ready(function() {
         }
         
     });
+
+
 })
