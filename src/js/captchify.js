@@ -10,13 +10,13 @@ var _types = {
     },
 
     // 3ème colonne 
-    lines: function(area) {
+    lines: function(area, value) {
         var canvas = area.parent;
         var width = canvas.clientWidth; 
         var height = canvas.clientHeight;
 
         var group = area.group();
-        for (i=0; i<50; i++) {
+        for (i=0; i<value; i++) {
             var str = Math.floor((Math.random()*4)+1);
             if (_colors) {
                 var color = randomColor();
@@ -29,18 +29,17 @@ var _types = {
         return group;
     },
 
-    curves: function(area) {
+    curves: function(area, value) {
         var canvas = area.parent;
         var width = canvas.clientWidth; 
         var height = canvas.clientHeight;
 
         var group = area.group();
-        for (i=0; i<10; i++) {
+        for (i=0; i<value; i++) {
             var plot = "M"+randomWidth(width)+","+randomHeight(height)+" Q"+randomWidth(width)+", "+randomHeight(height)+ " "+randomWidth(width)+","+randomHeight(height)+" T"+randomWidth(width)+","+randomHeight(height);
             var str = Math.floor((Math.random()*4)+1);
             if (_colors) {
                 var color = randomColor();
-                console.log(color);
             } else {
                 var color = '#000';
             };
@@ -51,18 +50,17 @@ var _types = {
         return group;
     },
 
-    points: function(area) {
+    points: function(area, value) {
         var canvas = area.parent;
         var width = canvas.clientWidth; 
         var height = canvas.clientHeight;
 
         var group = area.group();
-        for (i=0; i<1000; i++) {
+        for (i=0; i<value; i++) {
             var a = randomWidth(width);
             var b = randomHeight(height);
             if (_colors) {
                 var color = randomColor();
-                console.log(color);
             } else {
                 var color = '#000';
             };
@@ -109,6 +107,7 @@ function Captchifier(canvas) {
     this.svgText.move(width / 2, height / 2);
     this.svgText.font({size: 160, anchor: 'middle'});
 
+    var layers = [];
     var front, back;
 
     /*********/
@@ -124,11 +123,21 @@ function Captchifier(canvas) {
     /*********/
     this.setBack = function(type, value) {
         var func = _types[type];
-        var layer = func(drawArea);
-        if (back != undefined)
-             back.remove();
-        back = layer;
-        back.back();
+        var isPresent = false;
+        for (var i in layers) {
+            if (layers[i][0] == type) {
+                layers[i][1].remove();
+                layers[i][1] = func(drawArea, value);
+                layers[i][1].back();
+                isPresent = true;
+            }
+        }
+
+        if (!isPresent) {
+            var layer = func(drawArea);
+            layers.push([type, layer]);
+            layer.back();
+        }
     };
 
     /*********/
@@ -205,15 +214,15 @@ $(document).ready(function() {
 
     // 3ème colonne
     $('#slider-lines').on('change.bfhslider', function(e) {
-        captcha.setBack('lines');
+        captcha.setBack('lines', e.target.value);
         setCustom();
     });
     $('#slider-curves').on('change.bfhslider', function(e) {
-        captcha.setBack('curves');
+        captcha.setBack('curves', e.target.value);
         setCustom();
     });
     $('#slider-points').on('change.bfhslider', function(e) {
-        captcha.setBack('points');
+        captcha.setBack('points', e.target.value);
         setCustom();
     });
 
