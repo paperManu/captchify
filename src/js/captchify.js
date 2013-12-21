@@ -36,14 +36,14 @@ var _types = {
 
         var group = area.group();
         for (i=0; i<value; i++) {
-            var plot = "M"+randomWidth(width)+","+randomHeight(height)+" Q"+randomWidth(width)+", "+randomHeight(height)+ " "+randomWidth(width)+","+randomHeight(height)+" T"+randomWidth(width)+","+randomHeight(height);
+            var plot = "M"+randomWidth(width)+","+randomHeight(height)+" Q"+randomWidth(width)+","+randomHeight(height)+ " "+randomWidth(width)+","+randomHeight(height)+" T"+randomWidth(width)+","+randomHeight(height);
             var str = Math.floor((Math.random()*4)+1);
             if (_colors) {
                 var color = randomColor();
             } else {
                 var color = '#000';
             };
-            var curve = area.path(plot).stroke(color).fill('none');
+            var curve = area.path(plot, true).stroke({color: color, width: 2}).fill('none');
             group.add(curve);
         } 
 
