@@ -71,20 +71,8 @@ body {
 	margin-top: 4px;
 }
 
-.bfh-slider {
-	margin-top: 0px !important;
-	margin-bottom: 21px !important;
-}
-
-.bfh-slider>.bfh-slider-handle {
-	margin-top: -5px !important;
-	height: 28px !important;
-}
-
-.bfh-slider-value {
-	margin-top: 3px !important;
-	width: 34px !important;
-	margin-left: -8px !important;
+.col-selected {
+	background-color: #eee !important;
 }
 
 .slider-txt {
