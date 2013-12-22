@@ -106,9 +106,7 @@ function Captchifier(canvas) {
     this.svgText = drawArea.text(this.inputText);
     this.svgText.move(width / 2, height / 2);
     this.svgText.font({size: 160, anchor: 'middle'});
-    console.log('pouet');
     var path = 'M0,150 Q' + width/4 +  ',' + (randomHeight(300)) + ' ' + width/2 + ',150 T' + width + ',150';
-    console.log(path);
     this.svgText.path(path, true);
 
     var layers = [];
@@ -128,7 +126,7 @@ function Captchifier(canvas) {
         }
 
         if (!isPresent) {
-            var layer = func(drawArea);
+            var layer = func(drawArea, value);
             layers.push([type, layer]);
             layer.back();
         }
@@ -156,8 +154,24 @@ function Captchifier(canvas) {
 }
 
 /*************/
+var parseQuery = function(captcha) {
+    var url = purl();
+    var value;
+
+    if ((value = url.param('text')) != undefined)
+        captcha.setText(value);
+    if ((value = url.param('lines')) != undefined)
+        captcha.setBack('lines', value);
+    if ((value = url.param('curves')) != undefined)
+        captcha.setBack('curves', value);
+    if ((value = url.param('points')) != undefined)
+        captcha.setBack('points', value);
+}
+
+/*************/
 $(document).ready(function() {
     var captcha = new Captchifier($('#drawing'));
+    parseQuery(captcha);
 
     $('#col').toggleClass('col-selected');
 
