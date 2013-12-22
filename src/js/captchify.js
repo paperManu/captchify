@@ -35,8 +35,9 @@ var _types = {
         var height = canvas.clientHeight;
 
         var group = area.group();
-        for (i=0; i<value; i++) {
+        for (i=0; i<1; i++) {
             var plot = "M"+randomWidth(width)+","+randomHeight(height)+" Q"+randomWidth(width)+","+randomHeight(height)+ " "+randomWidth(width)+","+randomHeight(height)+" T"+randomWidth(width)+","+randomHeight(height);
+            plot = 'M0,200 Q' + width/2 +  ',100 ' + width/2 + ',200 T' + width + ',200';
             var str = Math.floor((Math.random()*4)+1);
             if (_colors) {
                 var color = randomColor();
@@ -106,19 +107,13 @@ function Captchifier(canvas) {
     this.svgText = drawArea.text(this.inputText);
     this.svgText.move(width / 2, height / 2);
     this.svgText.font({size: 160, anchor: 'middle'});
+    console.log('pouet');
+    var path = 'M0,150 Q' + width/4 +  ',' + (randomHeight(300)) + ' ' + width/2 + ',150 T' + width + ',150';
+    console.log(path);
+    this.svgText.path(path, true);
 
     var layers = [];
     var front, back;
-
-    /*********/
-    this.draw = function(text) {
-        if (text != undefined && typeof(text) == 'string')
-            this.inputText = text;
-        else
-            return;
-            
-        this.svgText.text(this.inputText);
-    };
 
     /*********/
     this.setBack = function(type, value) {
