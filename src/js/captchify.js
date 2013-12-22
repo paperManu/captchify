@@ -35,9 +35,8 @@ var _types = {
         var height = canvas.clientHeight;
 
         var group = area.group();
-        for (i=0; i<1; i++) {
+        for (i=0; i<value; i++) {
             var plot = "M"+randomWidth(width)+","+randomHeight(height)+" Q"+randomWidth(width)+","+randomHeight(height)+ " "+randomWidth(width)+","+randomHeight(height)+" T"+randomWidth(width)+","+randomHeight(height);
-            plot = 'M0,200 Q' + width/2 +  ',100 ' + width/2 + ',200 T' + width + ',200';
             var str = Math.floor((Math.random()*4)+1);
             if (_colors) {
                 var color = randomColor();
