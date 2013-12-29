@@ -9,67 +9,92 @@ var _types = {
         return circle;
     },
 
-    // 3ème colonne 
-    lines: function(area, value) {
-        var canvas = area.parent;
-        var width = canvas.clientWidth; 
-        var height = canvas.clientHeight;
-
-        var group = area.group();
-        for (i=0; i<value; i++) {
-            var str = Math.floor((Math.random()*4)+1);
-            if (_colors) {
-                var color = randomColor();
-            } else {
-                var color = '#000';
-            };
-            var line = area.line(randomWidth(width), randomHeight(height), randomWidth(width), randomHeight(height)).stroke({ width: str , color: color});
-            group.add(line);
+    lines_: function() {
+        var test = 18;
+        return function(area, value) {
+            test++;
+            console.log(area, value, test);
         }
-        return group;
     },
 
-    curves: function(area, value) {
-        var canvas = area.parent;
-        var width = canvas.clientWidth; 
-        var height = canvas.clientHeight;
-
+    lines: function(area) {
+        var qty = 0;
         var group = area.group();
-        for (i=0; i<value; i++) {
-            var plot = "M"+randomWidth(width)+","+randomHeight(height)+" Q"+randomWidth(width)+","+randomHeight(height)+ " "+randomWidth(width)+","+randomHeight(height)+" T"+randomWidth(width)+","+randomHeight(height);
-            var str = Math.floor((Math.random()*4)+1);
-            if (_colors) {
-                var color = randomColor();
-            } else {
-                var color = '#000';
-            };
-            var curve = area.path(plot, true).stroke({color: color, width: 2}).fill('none');
-            group.add(curve);
-        } 
+        group.back();
+        return function(value) {
+            var canvas = area.parent;
+            var width = canvas.clientWidth; 
+            var height = canvas.clientHeight;
 
-        return group;
+            for (var i = qty; i < value; i++, qty++) {
+                var str = Math.floor((Math.random()*4)+1);
+                if (_colors) {
+                    var color = randomColor();
+                } else {
+                    var color = '#000';
+                };
+                var line = area.line(randomWidth(width), randomHeight(height), randomWidth(width), randomHeight(height)).stroke({ width: str , color: color});
+                group.add(line);
+            }
+
+            for (var i = value; i < group._children.length; ++i, qty--) {
+                group.removeElement(group._children[i]);
+            }
+        }
     },
 
-    points: function(area, value) {
-        var canvas = area.parent;
-        var width = canvas.clientWidth; 
-        var height = canvas.clientHeight;
-
+    curves: function(area) {
+        var qty = 0;
         var group = area.group();
-        for (i=0; i<value; i++) {
-            var a = randomWidth(width);
-            var b = randomHeight(height);
-            if (_colors) {
-                var color = randomColor();
-            } else {
-                var color = '#000';
-            };
-            var line = area.line(a, b, a+2, b).stroke({ width: 2, color: color });
-            group.add(line);
+        group.back();
+        return function(value) {
+            var canvas = area.parent;
+            var width = canvas.clientWidth; 
+            var height = canvas.clientHeight;
+
+            for (var i = qty; i < value; i++, qty++) {
+                var plot = "M"+randomWidth(width)+","+randomHeight(height)+" Q"+randomWidth(width)+","+randomHeight(height)+ " "+randomWidth(width)+","+randomHeight(height)+" T"+randomWidth(width)+","+randomHeight(height);
+                var str = Math.floor((Math.random()*4)+1);
+                if (_colors) {
+                    var color = randomColor();
+                } else {
+                    var color = '#000';
+                };
+                var curve = area.path(plot, true).stroke({color: color, width: 2}).fill('none');
+                group.add(curve);
+            } 
+
+            for (var i = value; i < group._children.length; ++i, qty--) {
+                group.removeElement(group._children[i]);
+            }
         }
+    },
 
-        return group;
+    points: function(area) {
+        var qty = 0;
+        var group = area.group();
+        group.back();
+        return function(value) {
+            var canvas = area.parent;
+            var width = canvas.clientWidth; 
+            var height = canvas.clientHeight;
 
+            for (var i = qty; i < value; i++, qty++) {
+                var a = randomWidth(width);
+                var b = randomHeight(height);
+                if (_colors) {
+                    var color = randomColor();
+                } else {
+                    var color = '#000';
+                };
+                var line = area.line(a, b, a+2, b).stroke({ width: 2, color: color });
+                group.add(line);
+            }
+
+            for (var i = value; i < group._children.length; ++i, --qty) {
+                group.removeElement(group._children[i]);
+            }
+        }
     }
 
     //blur: function(area) {
@@ -106,7 +131,7 @@ function Captchifier(canvas) {
     this.svgText = drawArea.text(this.inputText);
     this.svgText.move(width / 2, height / 2);
     this.svgText.font({size: 160, anchor: 'middle'});
-    var path = 'M0,150 Q' + width/4 +  ',' + (randomHeight(300)) + ' ' + width/2 + ',150 T' + width + ',150';
+    var path = 'M0,150 Q' + width/4 +  ',' + (randomHeight(400)) + ' ' + width/2 + ',150 T' + width + ',150';
     this.svgText.path(path, true);
 
     var layers = [];
@@ -118,17 +143,16 @@ function Captchifier(canvas) {
         var isPresent = false;
         for (var i in layers) {
             if (layers[i][0] == type) {
-                layers[i][1].remove();
-                layers[i][1] = func(drawArea, value);
-                layers[i][1].back();
+                layers[i][1](value);
                 isPresent = true;
             }
         }
 
         if (!isPresent) {
-            var layer = func(drawArea, value);
+            var layer = func(drawArea);
+            console.log(layer);
+            layer(value);
             layers.push([type, layer]);
-            layer.back();
         }
     };
 
