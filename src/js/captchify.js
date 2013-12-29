@@ -193,11 +193,34 @@ var parseQuery = function(captcha) {
 }
 
 /*************/
+function isColor () {
+    if (_colors) {
+        if ($('#col').hasClass('col-selected')) {
+            // ne rien faire 
+        } else if ($('#bw').hasClass('col-selected')) {
+            // changer
+            $('#col').addClass('col-selected');
+            $('#bw').removeClass('col-selected');
+        } else {
+            $('#col').addClass ('col-selected');
+        }
+    } else {
+        if ($('#col').hasClass('col-selected')) {
+            // changer
+            $('#col').toggleClass('col-selected');
+            $('#bw').toggleClass('col-selected');
+        } else {
+            // ne rien faire 
+        }
+    }   
+}
+
+/*************/
 $(document).ready(function() {
     var captcha = new Captchifier($('#drawing'));
     parseQuery(captcha);
 
-    $('#col').toggleClass('col-selected');
+    isColor();
 
     // 1ère colonne
     $('#inputText').on('input', function(e) {
@@ -215,14 +238,12 @@ $(document).ready(function() {
 
     $('#bw').on('click', function () {
         _colors=false;
-        $('#col').toggleClass('col-selected');
-        $('#bw').toggleClass('col-selected');
+        isColor();
         setCustom();
     });
     $('#col').on('click', function () {
         _colors=true;
-        $('#col').toggleClass('col-selected');
-        $('#bw').toggleClass('col-selected');
+        isColor();
         setCustom();
     });
 
