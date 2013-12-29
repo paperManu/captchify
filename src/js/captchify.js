@@ -4,10 +4,10 @@ var _colors = true;
 
 /*************/
 var _types = {
-    circles: function(area) {
-        var circle = area.circle(100).move(200, 200);
-        return circle;
-    },
+    //circles: function(area) {
+    //    var circle = area.circle(100).move(200, 200);
+    //    return circle;
+    //},
 
     lines_: function() {
         var test = 18;
@@ -96,11 +96,79 @@ var _types = {
             }
         }
     }
-
-    //blur: function(area) {
-
-    //}
 };
+
+/*************/
+function Text(drawArea) {
+    this.text = "";
+    this.size = 160;
+    this.spacing = 60;
+
+    var that = this;
+    var allText = drawArea.group();
+    console.log(allText);
+
+    /*********/
+    var addLetter = function(letter, position, angle) {
+        var svgText = drawArea.text(letter[0]);
+        svgText.move(position[0], position[1]);
+        svgText.font({size: that.size, anchor: 'middle'});
+        svgText.rotate(angle);
+        allText.add(svgText);
+    }
+
+    /*********/
+    var addWord = function(word, position) {
+        var deltaStep = Math.random() * 32 - 16;
+        var delta = [position[0], position[1]];
+        var alphaStep = Math.random() * 30 * deltaStep / Math.abs(deltaStep);
+        var alpha = 0;
+        for (var i = 0; i < word.length; ++i) {
+            addLetter(word[i], delta, alpha);
+            delta[0] += that.spacing;
+            delta[1] += deltaStep;
+            position[0] += that.spacing;
+            alpha += alphaStep;
+        }
+        position[0] += that.spacing;
+    }
+
+    /*********/
+    this.redraw = function() {
+        this.setText(this.text);
+    }
+
+    /*********/
+    this.setDeformation = function(value) {
+    }
+
+    /*********/
+    this.setFont = function(font) {
+    }
+
+    /*********/
+    this.setSize = function(value) {
+    }
+
+    /*********/
+    this.setSpacing = function(value) {
+    }
+
+    /*********/
+    this.setText = function(text) {
+        if (allText._children != undefined)
+            for (var i = allText._children.length - 1; i >= 0; --i) {
+                allText.removeElement(allText._children[i]);
+            }
+
+        this.text = String(text);
+        
+        var delta = [0, 0];
+        this.text.split(' ').forEach(function(word) {
+            addWord(word, delta);
+        });
+    }
+}
 
 /*************/
 function Captchifier(canvas) {
@@ -136,6 +204,8 @@ function Captchifier(canvas) {
 
     var layers = [];
     var front, back;
+
+    this.text = new Text(drawArea);
 
     /*********/
     this.setBack = function(type, value) {
@@ -174,6 +244,7 @@ function Captchifier(canvas) {
     /*********/
     this.setText = function(text) {
         this.svgText.text(text);
+        this.text.setText(text);
     };
 }
 
