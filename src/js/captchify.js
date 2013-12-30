@@ -109,22 +109,35 @@ function Text(drawArea) {
     console.log(allText);
 
     /*********/
-    var addLetter = function(letter, position, angle) {
+    var addLetter = function(letter, position, angle, skwX, skwY) {
         var svgText = drawArea.text(letter[0]);
         svgText.move(position[0], position[1]);
+        var skwX2 = Math.random() * 100 - 50;
+        var skwY2 = Math.random() * 100 - 50;
+        if (_colors) {
+                    var color = randomColor();
+                } else {
+                    var color = '#000';
+                };
         svgText.font({size: that.size, anchor: 'middle'});
         svgText.rotate(angle);
+        svgText.fill({color : color});
+        svgText.skew(skwX,skwY);
+        allText.skew(skwX2,skwY2);
         allText.add(svgText);
     }
 
     /*********/
     var addWord = function(word, position) {
-        var deltaStep = Math.random() * 32 - 16;
+        var deltaStep = Math.random() * 22 - 11;
         var delta = [position[0], position[1]];
-        var alphaStep = Math.random() * 30 * deltaStep / Math.abs(deltaStep);
+        var alphaStep = Math.random() * 20 * deltaStep / Math.abs(deltaStep);
         var alpha = 0;
+        var skwX = Math.random() * 20 - 10;
+        var skwY = Math.random() * 20 - 10;
+
         for (var i = 0; i < word.length; ++i) {
-            addLetter(word[i], delta, alpha);
+            addLetter(word[i], delta, alpha, skwX, skwY);
             delta[0] += that.spacing;
             delta[1] += deltaStep;
             position[0] += that.spacing;
@@ -246,6 +259,16 @@ function Captchifier(canvas) {
         this.svgText.text(text);
         this.text.setText(text);
     };
+
+    /*********/
+    this.makeBlack = function () {
+        // tout mettre en noir
+    };
+
+    /*********/
+    this.makeColor = function () {
+        // appliquer des couleurs 
+    }
 }
 
 /*************/
@@ -310,11 +333,13 @@ $(document).ready(function() {
     $('#bw').on('click', function () {
         _colors=false;
         isColor();
+        captcha.makeBlack();
         setCustom();
     });
     $('#col').on('click', function () {
         _colors=true;
         isColor();
+        captcha.makeColor();
         setCustom();
     });
 
@@ -323,6 +348,7 @@ $(document).ready(function() {
     $('#slider-size').slider({min:8, max:240, value:120});
     $('#slider-size').on('slide', function(e, ui) {
         captcha.setSize(ui.value);
+        // text.setSize(ui.value);
         setCustom();
     });
 
