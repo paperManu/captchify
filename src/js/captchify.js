@@ -99,52 +99,77 @@ var _types = {
 };
 
 /*************/
-function Text(drawArea) {
+function Text(drawArea, width, height) {
     this.text = "";
     this.size = 160;
-    this.spacing = 60;
+    this.spacing = 80;
+    this.spacingValue = 50;
 
     var that = this;
+    var fontFamily = 'cooper';
     var allText = drawArea.group();
-    console.log(allText);
 
     /*********/
-    var addLetter = function(letter, position, angle, skwX, skwY) {
+    var addLetter = function(group, letter, position, angle, skwX, skwY) {
         var svgText = drawArea.text(letter[0]);
         svgText.move(position[0], position[1]);
-        var skwX2 = Math.random() * 100 - 50;
-        var skwY2 = Math.random() * 100 - 50;
+        //var skwX = Math.random() * 20 - 10;
+        //var skwY = Math.random() * 20 - 10;
+        var sizeCoeff = Math.random() * 0.6 + 0.7;
         if (_colors) {
-                    var color = randomColor();
-                } else {
-                    var color = '#000';
-                };
-        svgText.font({size: that.size, anchor: 'middle'});
+            var color = randomColor();
+        } else {
+            var color = '#000';
+        }
+        svgText.font({family: that.fontFamily, size: that.size * sizeCoeff, anchor: 'middle'});
         svgText.rotate(angle);
         svgText.fill({color : color});
-        svgText.skew(skwX,skwY);
-        allText.skew(skwX2,skwY2);
-        allText.add(svgText);
+        svgText.stroke({color: color, width: Math.random()*10});
+        svgText.skew(0, skwY);
+        //allText.add(svgText);
+        group.add(svgText);
     }
 
     /*********/
     var addWord = function(word, position) {
         var deltaStep = Math.random() * 22 - 11;
         var delta = [position[0], position[1]];
-        var alphaStep = Math.random() * 20 * deltaStep / Math.abs(deltaStep);
+        var alphaStep = Math.random() * 5 * deltaStep / Math.abs(deltaStep);
         var alpha = 0;
         var skwX = Math.random() * 20 - 10;
         var skwY = Math.random() * 20 - 10;
 
+        var wordGroup = drawArea.group();
         for (var i = 0; i < word.length; ++i) {
-            addLetter(word[i], delta, alpha, skwX, skwY);
+            addLetter(wordGroup, word[i], delta, alpha, skwX, skwY);
             delta[0] += that.spacing;
             delta[1] += deltaStep;
             position[0] += that.spacing;
             alpha += alphaStep;
         }
+        wordGroup.skew(skwX, 0);
+        allText.add(wordGroup);
         position[0] += that.spacing;
     }
+
+    /*********/
+    this.makeBlack = function() {
+        for (var i in allText._children) {
+            for (var j in allText._children[i]._children) {
+                allText._children[i]._children[j].fill({color: '#000'}).stroke({color: '#000'});
+            }
+        }
+    }
+
+     /*********/
+    this.makeColor = function() {
+        for (var i in allText._children) {
+            for (var j in allText._children[i]._children) {
+                var color = randomColor();
+                allText._children[i]._children[j].fill({color: color}).stroke({color: color});
+            }
+        }
+    }   
 
     /*********/
     this.redraw = function() {
@@ -161,10 +186,17 @@ function Text(drawArea) {
 
     /*********/
     this.setSize = function(value) {
+        this.size = value;
+        this.setSpacing(this.spacingValue);
+        //this.setText(this.text);
+        return this;
     }
 
     /*********/
     this.setSpacing = function(value) {
+        this.spacingValue = value;
+        this.spacing = value / 100 * this.size;
+        this.setText(this.text);
     }
 
     /*********/
@@ -180,6 +212,8 @@ function Text(drawArea) {
         this.text.split(' ').forEach(function(word) {
             addWord(word, delta);
         });
+        console.log(height);
+        allText.center(width / 2, 200);
     }
 }
 
@@ -209,16 +243,17 @@ function Captchifier(canvas) {
     var height = father.height();
 
     var drawArea = SVG(father.attr('id')).size('100%', '60%');
-    this.svgText = drawArea.text(this.inputText);
-    this.svgText.move(width / 2, height / 2);
-    this.svgText.font({size: 160, anchor: 'middle'});
-    var path = 'M0,150 Q' + width/4 +  ',' + (randomHeight(400)) + ' ' + width/2 + ',150 T' + width + ',150';
-    this.svgText.path(path, true);
+    //this.svgText = drawArea.text(this.inputText);
+    //this.svgText.move(width / 2, height / 2);
+    //this.svgText.font({size: 160, anchor: 'middle'});
+    //var path = 'M0,150 Q' + width/4 +  ',' + (randomHeight(400)) + ' ' + width/2 + ',150 T' + width + ',150';
+    //this.svgText.path(path, true);
 
     var layers = [];
     var front, back;
 
-    this.text = new Text(drawArea);
+    this.text = new Text(drawArea, width, height);
+    this.text.setText(this.inputText);
 
     /*********/
     this.setBack = function(type, value) {
@@ -251,23 +286,32 @@ function Captchifier(canvas) {
 
     /*********/
     this.setSize = function(size) {
-        this.svgText.font({size: size});
+        //this.svgText.font({size: size});
+        this.text.setSize(size);
+    };
+
+    /*********/
+    this.setSpacing = function(space) {
+        //this.svgText.font({size: size});
+        this.text.setSpacing(space);
     };
 
     /*********/
     this.setText = function(text) {
-        this.svgText.text(text);
+        //this.svgText.text(text);
         this.text.setText(text);
     };
 
     /*********/
     this.makeBlack = function () {
         // tout mettre en noir
+        this.text.makeBlack();
     };
 
     /*********/
     this.makeColor = function () {
         // appliquer des couleurs 
+        this.text.makeColor();
     }
 }
 
@@ -348,13 +392,14 @@ $(document).ready(function() {
     $('#slider-size').slider({min:8, max:240, value:120});
     $('#slider-size').on('slide', function(e, ui) {
         captcha.setSize(ui.value);
-        // text.setSize(ui.value);
+        //captcha.text.setSize(ui.value);
         setCustom();
     });
 
-    $('#slider-spacing').slider({min:-10, max:10, value:0})
+    $('#slider-spacing').slider({min:0, max:200, value:0})
     $('#slider-spacing').on('slide', function(e, ui) {
-        console.log(ui.value);
+        captcha.setSpacing(ui.value);
+        //console.log(ui.value);
         setCustom();
     });
 
