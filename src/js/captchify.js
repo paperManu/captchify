@@ -102,8 +102,10 @@ var _types = {
 function Text(drawArea, width, height) {
     this.text = "";
     this.size = 160;
+    this.fuzzy = "";
     this.spacing = 80;
     this.spacingValue = 50;
+    this.skewtext = 0;
 
     var that = this;
     var fontFamily = 'cooper';
@@ -125,7 +127,8 @@ function Text(drawArea, width, height) {
         svgText.rotate(angle);
         svgText.fill({color : color});
         svgText.stroke({color: color, width: Math.random()*10});
-        svgText.skew(0, skwY);
+        //var skewtext = that.skewtext;
+        //svgText.skew(0, skewtext);
         //allText.add(svgText);
         group.add(svgText);
     }
@@ -138,16 +141,18 @@ function Text(drawArea, width, height) {
         var alpha = 0;
         var skwX = Math.random() * 20 - 10;
         var skwY = Math.random() * 20 - 10;
+        
 
         var wordGroup = drawArea.group();
         for (var i = 0; i < word.length; ++i) {
+            //delta[1] = Math.random() * fuzzy;
             addLetter(wordGroup, word[i], delta, alpha, skwX, skwY);
             delta[0] += that.spacing;
-            delta[1] += deltaStep;
+            //delta[1] += deltaStep;
             position[0] += that.spacing;
             alpha += alphaStep;
         }
-        wordGroup.skew(skwX, 0);
+        //wordGroup.skew(skwX, 0);
         allText.add(wordGroup);
         position[0] += that.spacing;
     }
@@ -178,6 +183,18 @@ function Text(drawArea, width, height) {
 
     /*********/
     this.setDeformation = function(value) {
+        this.skewtext = value;
+        var count = 0;
+        for (var i in allText._children) {
+            for (var j in allText._children[i]._children) {
+                var skw = value;
+                count = count + 1;
+                var trick = (-2)*value;
+                console.log(count);
+                allText._children[i]._children[j].skew(0, skw);
+                allText._children[i]._children[j].y(trick * count);
+            }
+        }  
     }
 
     /*********/
@@ -185,10 +202,20 @@ function Text(drawArea, width, height) {
     }
 
     /*********/
+    this.setFuzzy = function(value) {
+        this.fuzzy = value;
+        for (var i in allText._children) {
+            for (var j in allText._children[i]._children) {
+                var position = Math.random() * value;
+                allText._children[i]._children[j].y(position);
+            }
+        }  
+    }
+
+    /*********/
     this.setSize = function(value) {
         this.size = value;
         this.setSpacing(this.spacingValue);
-        //this.setText(this.text);
         return this;
     }
 
@@ -212,7 +239,6 @@ function Text(drawArea, width, height) {
         this.text.split(' ').forEach(function(word) {
             addWord(word, delta);
         });
-        console.log(height);
         allText.center(width / 2, 200);
     }
 }
@@ -297,6 +323,16 @@ function Captchifier(canvas) {
     };
 
     /*********/
+    this.setDeformation = function (def) {
+        this.text.setDeformation(def);
+    };
+
+    /*********/
+    this.setFuzzy = function(fuzzy) {
+        this.text.setFuzzy(fuzzy);
+    };
+
+    /*********/
     this.setText = function(text) {
         //this.svgText.text(text);
         this.text.setText(text);
@@ -304,14 +340,16 @@ function Captchifier(canvas) {
 
     /*********/
     this.makeBlack = function () {
-        // tout mettre en noir
+        // mettre teste en noir
         this.text.makeBlack();
+        // mettre reste en noir 
     };
 
     /*********/
     this.makeColor = function () {
-        // appliquer des couleurs 
+        // appliquer des couleurs au texte
         this.text.makeColor();
+        // appliquer des couleurs au reste
     }
 }
 
@@ -403,15 +441,15 @@ $(document).ready(function() {
         setCustom();
     });
 
-    $('#slider-def').slider();
+    $('#slider-def').slider({min:0, max:50, value:0});
     $('#slider-def').on('slide', function(e, ui) {
-        console.log(ui.value);
+        captcha.setDeformation(ui.value);
         setCustom();
     });
 
-    $('#slider-fuzzy').slider();
+    $('#slider-fuzzy').slider({min:0, max:500, value:0});
     $('#slider-fuzzy').on('slide', function(e, ui) {
-        console.log(ui.value);
+        captcha.setFuzzy(ui.value);
         setCustom();
     });
 
@@ -437,7 +475,7 @@ $(document).ready(function() {
 
     $('#slider-blur').slider();
     $('#slider-blur').on('slide', function(e, ui) {
-        captacha.setFront('blur');
+        captcha.setFront('blur');
         setCustom();
     })
 
