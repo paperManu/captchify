@@ -123,12 +123,16 @@ function Text(drawArea, width, height) {
         } else {
             var color = '#000';
         }
-        svgText.font({family: that.fontFamily, size: that.size * sizeCoeff, anchor: 'middle'});
+        svgText.font({family: that.fontFamily, size: that.size * sizeCoeff, anchor: 'start'});
         svgText.rotate(angle);
         svgText.fill({color : color});
         svgText.stroke({color: color, width: Math.random()*10});
-        //var skewtext = that.skewtext;
-        //svgText.skew(0, skewtext);
+        
+        var fuzzy = Math.random() * that.fuzzy;
+        svgText.skew(0, that.skewtext);
+        // Next pair of lines are meant to correct the displacement due to skew
+        position[1] -= (that.spacing * 0.8) * Math.tan(that.skewtext * Math.PI / 180.0);
+        svgText.move(position[0], position[1] + fuzzy);
         //allText.add(svgText);
         group.add(svgText);
     }
@@ -166,7 +170,7 @@ function Text(drawArea, width, height) {
         }
     }
 
-     /*********/
+    /*********/
     this.makeColor = function() {
         for (var i in allText._children) {
             for (var j in allText._children[i]._children) {
@@ -184,17 +188,7 @@ function Text(drawArea, width, height) {
     /*********/
     this.setDeformation = function(value) {
         this.skewtext = value;
-        var count = 0;
-        for (var i in allText._children) {
-            for (var j in allText._children[i]._children) {
-                var skw = value;
-                count = count + 1;
-                var trick = (-2)*value;
-                console.log(count);
-                allText._children[i]._children[j].skew(0, skw);
-                allText._children[i]._children[j].y(trick * count);
-            }
-        }  
+        this.setText(this.text);
     }
 
     /*********/
@@ -204,12 +198,7 @@ function Text(drawArea, width, height) {
     /*********/
     this.setFuzzy = function(value) {
         this.fuzzy = value;
-        for (var i in allText._children) {
-            for (var j in allText._children[i]._children) {
-                var position = Math.random() * value;
-                allText._children[i]._children[j].y(position);
-            }
-        }  
+        this.setText(this.text);
     }
 
     /*********/
